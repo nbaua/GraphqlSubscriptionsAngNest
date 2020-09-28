@@ -26,5 +26,5 @@ type Mutation {
 }
 
 type Subscription {
-  wishAdded: WishMetadata!
+  wishAdded: WishMetadata
 }

@@ -9,9 +9,9 @@ export class Wish {
   isFulfilled: boolean; // wish status
 }
 
-@ObjectType()
+@ObjectType('WishMetadata')
 export class WishMetadata {
-  @Field()
+  @Field(type => Wish)
   newWish: Wish;
   @Field()
   dateAdded: Date;

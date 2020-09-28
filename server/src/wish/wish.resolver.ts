@@ -26,6 +26,8 @@ export class WishResolver {
 
   @Subscription(returns => WishMetadata, {
     name: 'wishAdded',
+    defaultValue: null,
+    nullable: true,
     // resolve: data => {
     //   return data as SubscriptionOptions;
     // },
