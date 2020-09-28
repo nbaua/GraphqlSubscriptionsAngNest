@@ -1,0 +1,74 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-warning p-1">
+  <a class="navbar-brand" href="#">Angular Graphql Subscription</a>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/">Demo</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container pt-5 mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="display-3">Make a wish</h5>
+          <span class="figure-caption">
+            It takes <code>5 seconds</code> to your wish (NOT) to get fulfilled.
+            This is <strong>intentional</strong> to avoid too frequent update
+            the following wish list without refreshing the page. Change the
+            polling interval, if you need faster updates to wish list.
+          </span>
+          <hr />
+          <div class="form-group" [formGroup]="myGroup">
+            <label for="wishControl">Enter your wish:</label>
+            <input
+              type="text"
+              formControlName="wishControl"
+              class="form-control"
+              maxlength="200"
+              (keydown)="handleKeySubmit($event)"
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            (click)="handleSubmit()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">All you wish for...</h5>
+          <h6 *ngIf="wishes.length == 0">Nothing at the moment</h6>
+          <table class="table mt-5" *ngIf="wishes.length > 0">
+            <thead>
+              <tr>
+                <th scope="col">Wish</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let wish of wishes">
+                <th scope="row">{{ wish.ambition }}</th>
+                <td>{{ getWishStatus(wish.isFulfilled) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
