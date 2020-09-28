@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["graphql-tag", "zen-observable"],
             "outputPath": "dist/angular-gql-subscriptions",
             "index": "src/index.html",
             "main": "src/main.ts",
