@@ -42,7 +42,7 @@ const GRAPHQL_ON_WISH_ADDED_SUBSCRIPTION = gql`
 export class AppComponent {
   title = 'angular-gql-subscriptions';
   private query: QueryRef<any>;
-  // ifAutoRefresh = false;
+  ifAutoRefresh = false;
   myGroup: FormGroup;
   wishes = [];
   querySubscription;
@@ -53,12 +53,6 @@ export class AppComponent {
     private apollo: Apollo,
     private formBuilder: FormBuilder // gqlService: ApplicationGraphQlService
   ) {
-    // this.lastWish = gqlService.subscribe();
-    // .toPromise()
-    // .then((r) => {
-    //   console.log('WHEN IN CONSTRUCTOR', r.data);
-    // });
-
     console.log('CONSTRUCTOR Calling');
   }
   // tslint:disable-next-line: use-lifecycle-interface
@@ -77,32 +71,33 @@ export class AppComponent {
   private initApollo() {
     this.query = this.apollo.watchQuery({
       query: GRAPHQL_GET_WISHES_QUERY,
-      // pollInterval: this.ifAutoRefresh ? 5000 : null, // Auto update data like for example dashboard
+      pollInterval: this.ifAutoRefresh ? 5000 : null, // Auto update data like for example dashboard
     });
 
     this.query.valueChanges.subscribe((result) => {
-      this.wishes = result.data && result.data.getWishes;
+      this.wishes = result?.data?.getWishes;
       this.lastUpdated = new Date().toLocaleTimeString();
     });
   }
 
   private initSubscription() {
-    // if (this.query) {
-    //   this.query.subscribeToMore({
-    //     document: GRAPHQL_ON_WISH_ADDED_SUBSCRIPTION,
-    //     updateQuery: async (prev, { subscriptionData }) => {
-    //       console.log('>>> initSubscription >>> ', subscriptionData.data);
-
-    //       if (!subscriptionData.data) {
-    //         return prev;
-    //       } else {
-    //         const newWish = subscriptionData.data;
-    //         console.log(JSON.stringify(newWish));
-    //         return newWish;
-    //       }
-    //     },
-    //   });
-    // }
+    if (this.query) {
+      this.query.subscribeToMore({
+        document: GRAPHQL_ON_WISH_ADDED_SUBSCRIPTION,
+        updateQuery: async (prev, { subscriptionData }) => {
+          if (Object.keys(prev || {}).length === 0) {
+            return { wishes: [] };
+          }
+          if (!subscriptionData?.data) {
+            return prev;
+          } else {
+            const newWish = subscriptionData?.data;
+            // console.log(JSON.stringify(newWish));
+            return newWish;
+          }
+        },
+      });
+    }
   }
 
   getWishStatus(isFulfilled) {
@@ -118,14 +113,11 @@ export class AppComponent {
           variables: {
             ambition: this.myGroup.controls.wishControl.value,
           },
-
-          context: {
-            useMultipart: true,
-          },
         })
         .subscribe(({ data }) => {
           if (data) {
             const result: any = data;
+            alert(result.makeWish.ambition + ' will be fulfilled in future.');
             this.query.refetch(); // for instant UI update
             this.myGroup.controls.wishControl.setValue('');
           }
