@@ -25,19 +25,10 @@
           <hr />
           <div class="form-group" [formGroup]="myGroup">
             <label for="wishControl">Enter your wish:</label>
-            <input
-              type="text"
-              formControlName="wishControl"
-              class="form-control"
-              maxlength="200"
-              (keydown)="handleKeySubmit($event)"
-            />
+            <input type="text" formControlName="wishControl" class="form-control" maxlength="200"
+              (keydown)="handleKeySubmit($event)" />
           </div>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            (click)="handleSubmit()"
-          >
+          <button type="submit" class="btn btn-primary" (click)="handleSubmit()">
             Submit
           </button>
         </div>

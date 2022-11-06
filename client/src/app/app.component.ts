@@ -13,7 +13,7 @@ const GRAPHQL_GET_WISHES_QUERY = gql`
 `;
 
 const GRAPHQL_ADD_WISH_MUTATION = gql`
-  mutation($ambition: String!) {
+  mutation ($ambition: String!) {
     makeWish(ambition: $ambition) {
       ambition
       isFulfilled
@@ -58,6 +58,8 @@ export class AppComponent {
     // .then((r) => {
     //   console.log('WHEN IN CONSTRUCTOR', r.data);
     // });
+
+    console.log('CONSTRUCTOR Calling');
   }
   // tslint:disable-next-line: use-lifecycle-interface
   ngOnInit() {
@@ -85,19 +87,22 @@ export class AppComponent {
   }
 
   private initSubscription() {
-    if (this.query) {
-      this.query.subscribeToMore({
-        document: GRAPHQL_ON_WISH_ADDED_SUBSCRIPTION,
-        updateQuery: async (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) {
-            return prev;
-          } else {
-            const newWish = subscriptionData.data;
-            return newWish;
-          }
-        },
-      });
-    }
+    // if (this.query) {
+    //   this.query.subscribeToMore({
+    //     document: GRAPHQL_ON_WISH_ADDED_SUBSCRIPTION,
+    //     updateQuery: async (prev, { subscriptionData }) => {
+    //       console.log('>>> initSubscription >>> ', subscriptionData.data);
+
+    //       if (!subscriptionData.data) {
+    //         return prev;
+    //       } else {
+    //         const newWish = subscriptionData.data;
+    //         console.log(JSON.stringify(newWish));
+    //         return newWish;
+    //       }
+    //     },
+    //   });
+    // }
   }
 
   getWishStatus(isFulfilled) {
@@ -122,6 +127,7 @@ export class AppComponent {
           if (data) {
             const result: any = data;
             this.query.refetch(); // for instant UI update
+            this.myGroup.controls.wishControl.setValue('');
           }
         });
     } else {
