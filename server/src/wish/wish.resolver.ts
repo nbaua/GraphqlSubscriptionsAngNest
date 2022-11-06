@@ -28,9 +28,6 @@ export class WishResolver {
     name: 'wishAdded',
     defaultValue: null,
     nullable: true,
-    // resolve: data => {
-    //   return data as SubscriptionOptions;
-    // },
   })
   wishAdded() {
     return pubSub.asyncIterator('wishAdded');
